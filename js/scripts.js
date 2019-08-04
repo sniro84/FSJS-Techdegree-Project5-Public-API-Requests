@@ -8,10 +8,6 @@ fetch(usersUrl)
     .then( (data) => displayUsers(data.results));
     
 
-
-
-
-
 function displayUsers(users)
 {
     let usersHTML = "";
@@ -27,14 +23,11 @@ function displayUsers(users)
     const searchContainer = document.querySelector('.search-container');
     searchContainer.appendChild(searchForm);
 
-    addCardListeners(users,cards);
-
-    
-    
+    addCardListeners(users);
+    addSearchListener();
 }
 
-
-function addCardListeners(users,cards)
+function addCardListeners(users)
 {
 
     let modalHTML = "";
@@ -48,7 +41,7 @@ function addCardListeners(users,cards)
             
             galleryDiv.innerHTML = modalHTML;
             const closeButton = document.querySelector('.modal-close-btn');
-            closeButton.addEventListener('click', () => displayUsers(users) ); 
+            closeButton.addEventListener('click', () =>  displayUsers(users) ); 
             
             const searchContainer = document.querySelector('.search-container');
             const searchForm = document.querySelector('.search-container > form');
@@ -108,6 +101,12 @@ function getFormInnerHTML()
     </form>`;
 }
 
+function addSearchListener()
+{    
+    const searchSubmit = document.querySelector('form');
+    searchSubmit.addEventListener('submit', filterResults);    
+}
+
 function getDate(string)
 {
     const year = string.slice(0,4);
@@ -117,3 +116,14 @@ function getDate(string)
     return (`${day}/${month}/${year}`);
 }
 
+function filterResults()
+{
+    const searchInput = document.querySelector('.search-input');
+    const value = searchInput.value;
+
+    for(let i=0; i<cards.length; i++)
+    {
+        const fullname = cards[i].children[1].children[0].textContent;
+        cards[i].style.display = (fullname.search(value) === -1) ? "none" : "";   
+    }
+}
