@@ -19,7 +19,7 @@ function displayUsers(users)
     searchForm.innerHTML = getFormInnerHTML();
     searchForm.setAttribute('action' , "#");
     searchForm.setAttribute('method', "get");
-    
+
     const searchContainer = document.querySelector('.search-container');
     searchContainer.appendChild(searchForm);
 
@@ -28,24 +28,38 @@ function displayUsers(users)
 }
 
 function addCardListeners(users)
-{
-
-    let modalHTML = "";
+{ 
     cards.forEach( (card,index) => {
         card.addEventListener('click', () => {
             const user = users[index];
             const dateOfBirth = getDate(user.dob.date);
 
             // update html content 
-            modalHTML += getModalContent(user,dateOfBirth);
-            
+            const modalHTML = getModalContent(user,dateOfBirth);            
             galleryDiv.innerHTML = modalHTML;
+
             const closeButton = document.querySelector('.modal-close-btn');
-            closeButton.addEventListener('click', () =>  displayUsers(users) ); 
+            closeButton.addEventListener('click', () =>  displayUsers(users) );
             
+            const nextButton = document.querySelector('#modal-next');
+            nextButton.addEventListener('click', () => {
+                const i = getNextIndex(index);
+                cards[i].dispatchEvent(new Event("click"));
+            });
+
+            const prevButton = document.querySelector('#modal-prev');
+            prevButton.addEventListener('click', () => {
+                const i = getPrevIndex(index);
+                cards[i].dispatchEvent(new Event("click"));
+            });    
+
             const searchContainer = document.querySelector('.search-container');
             const searchForm = document.querySelector('.search-container > form');
+            
+
             searchContainer.removeChild(searchForm);
+            
+
         });        
     });
 }
@@ -127,3 +141,19 @@ function filterResults()
         cards[i].style.display = (fullname.search(value) === -1) ? "none" : "";   
     }
 }
+
+
+function getNextIndex(index)
+{
+    const firstIndex = 0;
+    const lastIndex = cards.length - 1;
+    return (index === lastIndex) ? firstIndex : index + 1;
+}
+
+function getPrevIndex(index)
+{
+    const firstIndex = 0;
+    const lastIndex = cards.length - 1;
+    return (index === firstIndex) ? lastIndex : index - 1;
+}
+

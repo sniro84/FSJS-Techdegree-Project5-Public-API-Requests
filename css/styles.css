@@ -15,8 +15,10 @@ html, body {
 
 body {
     font-family: "Nunito", sans-serif;
+    font-weight: bold;
     text-align: center;
-    background: rgba(235, 235, 235, 0.9);
+    background: radial-gradient(circle at top right,rgb(211, 211, 136),#d18883);
+    background-size: 150% 150%;
 }
 
 header {
@@ -29,14 +31,15 @@ header {
 }
 
 header h1 {
-    font-size: 1.25em;
+    font-size: 1.45em;
+    font-weight: bold;
     color: rgba(50, 50, 50, 0.9);
     margin-top: 35px;
 }
 
 .search-input {
     padding: 0.4rem 1rem;
-    border: 1px solid rgba(200, 200, 200, 0.9);
+    border: 2px solid rgba(200, 200, 200, 0.9);
     border-radius: 0.25rem 0 0 0.25rem ;
     max-width: 20rem;
     transition: .4s ease-out;
@@ -44,7 +47,7 @@ header h1 {
 }
 
 .search-input:active, .search-input:hover, .search-input:focus {
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    border: 2px solid rgba(50, 50, 50, 0.9);
 }
 
 .search-submit {
@@ -52,14 +55,14 @@ header h1 {
     height: 33px;
     background: rgba(245, 245, 245, 0.9);
     border-radius: 0 0.25rem 0.25rem 0;
-    border: 1px solid rgba(200, 200, 200, 0.9);
+    border: 2px solid rgba(200, 200, 200, 0.9);
     transition: .4s ease-out;
     outline: none;
 }
 
 .search-submit:active, .search-submit:hover, .search-submit:focus {
     background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(50, 50, 50, 0.9);
+    border: 2px solid rgba(50, 50, 50, 0.9);
 }
 
 
@@ -88,8 +91,8 @@ header h1 {
     margin: 10px 10px 20px;
     padding: 10px;
     background: rgba(245, 245, 245, 0.9);
-    border-radius: 0.25em;
-    border: 1px solid rgba(50, 50, 50, 0.3);
+    border-radius: 0.65em;
+    border: 2px solid rgba(77, 75, 74, 0.3);
     transition: .4s ease-out;
     overflow: hidden;
 }
@@ -197,7 +200,8 @@ header h1 {
 .modal-btn-container .btn {
     display: inline-block;
     cursor: pointer;
-    font-size: 0.85em;
+    font-size: 0.95em;
+    font-weight: bold;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.9);
     padding: 0.75em 1.5em;
@@ -248,8 +252,8 @@ header h1 {
 @media (min-width: 1024px) {
 
     .card:hover {
-        background: rgba(255, 255, 255, 1);
-        border: 1px solid rgba(50, 50, 50, 0.9);
+        background: rgb(143, 243, 112);
+        border: 2px solid rgba(50, 50, 50, 0.9);
     }
 
     .card:hover .card-text {
@@ -257,7 +261,8 @@ header h1 {
     }
 
     .btn:hover {
-        background: rgba(255, 255, 255, 1);
-        color: rgba(25, 25, 25, 1); 
+        background: rgb(140, 102, 202);
+        border: 2px solid rgba(0, 0, 0, 0.9);
+        color: rgb(2, 2, 2);
     }
 }
