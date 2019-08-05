@@ -1,69 +1,121 @@
+/******************************************
+Treehouse FSJS Techdegree:
+project 5 - Public API Requests
+Name: Snir Holland
+Date: 05/08/2019
+******************************************/
+
+// Selecting the gallery div and the body of HTML file
 const galleryDiv = document.querySelector('.gallery');
 const body = document.querySelector('body');
+
+// Each card should contain user's details (name, email, location) 
 let cards = null;  
 
+// Request 12 employees with american nationality
 const usersUrl = 'https://randomuser.me/api/?results=12&nat=us';
 fetch(usersUrl)
     .then( (response) => response.json())
     .then( (data) => displayUsers(data.results));
-    
 
+// This function display user details in the form of 'cards'.    
 function displayUsers(users)
 {
+    // Appending HTML content to gallery div.
     let usersHTML = "";
     users.forEach( (user) => usersHTML += getUserContent(user));
     galleryDiv.innerHTML = usersHTML;
+
+    // The cards array can now be filled. 
     cards = document.querySelectorAll('.card');
     
+    // Dynamically add a search bar.
     let searchForm = document.createElement('form');
     searchForm.innerHTML = getFormInnerHTML();
     searchForm.setAttribute('action' , "#");
     searchForm.setAttribute('method', "get");
-
     const searchContainer = document.querySelector('.search-container');
     searchContainer.appendChild(searchForm);
 
+    // Add event listeners
     addCardListeners(users);
     addSearchListener();
 }
 
+
+// This function adds event listeners to all cards
 function addCardListeners(users)
 { 
     cards.forEach( (card,index) => {
         card.addEventListener('click', () => {
+
+            // helper variables
             const user = users[index];
             const dateOfBirth = getDate(user.dob.date);
 
-            // update html content 
+            // update html content inside the gallery div 
             const modalHTML = getModalContent(user,dateOfBirth);            
             galleryDiv.innerHTML = modalHTML;
 
+            // add modal close button listener
             const closeButton = document.querySelector('.modal-close-btn');
             closeButton.addEventListener('click', () =>  displayUsers(users) );
             
-            const nextButton = document.querySelector('#modal-next');
-            nextButton.addEventListener('click', () => {
-                const i = getNextIndex(index);
-                cards[i].dispatchEvent(new Event("click"));
-            });
+            // add modal toggle buttons (next/prev)
+            addModalToggleListeners(index);
 
-            const prevButton = document.querySelector('#modal-prev');
-            prevButton.addEventListener('click', () => {
-                const i = getPrevIndex(index);
-                cards[i].dispatchEvent(new Event("click"));
-            });    
-
+            // remove search bar
             const searchContainer = document.querySelector('.search-container');
             const searchForm = document.querySelector('.search-container > form');
-            
-
             searchContainer.removeChild(searchForm);
-            
-
         });        
     });
 }
 
+// This function adds event listener to search form
+function addSearchListener()
+{    
+    const searchSubmit = document.querySelector('form');
+    searchSubmit.addEventListener('submit', filterResults);    
+}
+
+// This function adds event listener to modal toggle buttons 
+function addModalToggleListeners(index)
+{
+    // The 'next' button
+    const nextButton = document.querySelector('#modal-next');
+    nextButton.addEventListener('click', () => {
+        const i = getNextIndex(index);  
+        cards[i].dispatchEvent(new Event("click"));  // trigger card 'click' event
+    });
+
+    // The 'prev' button
+    const prevButton = document.querySelector('#modal-prev');
+    prevButton.addEventListener('click', () => {
+        const i = getPrevIndex(index);
+        cards[i].dispatchEvent(new Event("click"));  // trigger card 'click' event
+    }); 
+}
+
+// This function displays search results with respect to search input value
+function filterResults()
+{
+    // Extracting value from search input field
+    const searchInput = document.querySelector('.search-input');
+    const value = searchInput.value;
+
+    // Iterate all the cards and search for the value 
+    for(let i=0; i<cards.length; i++)
+    {
+        // Get the full name from the data in the user's card
+        const fullname = cards[i].children[1].children[0].textContent;
+
+        // If the full name contains the value --> show card, otherwise --> hide card
+        cards[i].style.display = (fullname.search(value) === -1) ? "none" : "";   
+    }
+}
+
+// This function translates the modals of users to HTML content
 function getModalContent(user,dateOfBirth)
 {
     return "" +
@@ -88,8 +140,8 @@ function getModalContent(user,dateOfBirth)
       </div>
       </div>`;
 }
-     
-    
+
+// This function translates the cards of users to HTML content   
 function getUserContent(user)
 {
     return "" +
@@ -106,6 +158,7 @@ function getUserContent(user)
     </div>`;
 }            
 
+// This function translates search bar to HTML content
 function getFormInnerHTML()
 {
     return "" +
@@ -115,12 +168,7 @@ function getFormInnerHTML()
     </form>`;
 }
 
-function addSearchListener()
-{    
-    const searchSubmit = document.querySelector('form');
-    searchSubmit.addEventListener('submit', filterResults);    
-}
-
+// Helper function to extract the date from a string and change its template.
 function getDate(string)
 {
     const year = string.slice(0,4);
@@ -130,30 +178,23 @@ function getDate(string)
     return (`${day}/${month}/${year}`);
 }
 
-function filterResults()
-{
-    const searchInput = document.querySelector('.search-input');
-    const value = searchInput.value;
-
-    for(let i=0; i<cards.length; i++)
-    {
-        const fullname = cards[i].children[1].children[0].textContent;
-        cards[i].style.display = (fullname.search(value) === -1) ? "none" : "";   
-    }
-}
-
-
+// Helper function to get the next index number of a specified 'index'. 
 function getNextIndex(index)
 {
     const firstIndex = 0;
     const lastIndex = cards.length - 1;
+
+    // if 'index' is the last one in the array, return the first index.
     return (index === lastIndex) ? firstIndex : index + 1;
 }
 
+// Helper function to get the previous index number of a specified 'index'. 
 function getPrevIndex(index)
 {
     const firstIndex = 0;
     const lastIndex = cards.length - 1;
+
+    // if 'index' is the first one in the array, return the last index.
     return (index === firstIndex) ? lastIndex : index - 1;
 }
 
