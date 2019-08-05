@@ -45,7 +45,6 @@ function displayUsers(users)
     addSearchListener();
 }
 
-
 // This function adds event listeners to all cards
 function addCardListeners(users)
 { 
@@ -67,8 +66,8 @@ function addCardListeners(users)
             // add modal toggle buttons (next/prev)
             addModalToggleListeners(index);
 
-            // remove search bar
-            if (searchForm !== null)
+            //remove search bar   
+            if (searchForm !== null)   // card click event is NOT triggered by modal toggle button clicks.
             {
                 const searchContainer = document.querySelector('.search-container');
                 searchForm = document.querySelector('.search-container > form');
