@@ -10,7 +10,10 @@ const galleryDiv = document.querySelector('.gallery');
 const body = document.querySelector('body');
 
 // Each card should contain user's details (name, email, location) 
-let cards = null;  
+let cards = null;
+
+// The search bar which will be appended to and removed from screen
+let searchForm = null;
 
 // Request 12 employees with american nationality
 const usersUrl = 'https://randomuser.me/api/?results=12&nat=us';
@@ -30,7 +33,7 @@ function displayUsers(users)
     cards = document.querySelectorAll('.card');
     
     // Dynamically add a search bar.
-    let searchForm = document.createElement('form');
+    searchForm = document.createElement('form');
     searchForm.innerHTML = getFormInnerHTML();
     searchForm.setAttribute('action' , "#");
     searchForm.setAttribute('method', "get");
@@ -65,9 +68,13 @@ function addCardListeners(users)
             addModalToggleListeners(index);
 
             // remove search bar
-            const searchContainer = document.querySelector('.search-container');
-            const searchForm = document.querySelector('.search-container > form');
-            searchContainer.removeChild(searchForm);
+            if (searchForm !== null)
+            {
+                const searchContainer = document.querySelector('.search-container');
+                searchForm = document.querySelector('.search-container > form');
+                searchContainer.removeChild(searchForm);
+                searchForm = null;
+            }
         });        
     });
 }
